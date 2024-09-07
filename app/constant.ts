@@ -1,6 +1,9 @@
+import path from "path";
+
 export const OWNER = "ChatGPTNextWeb";
 export const REPO = "ChatGPT-Next-Web";
 export const REPO_URL = `https://github.com/${OWNER}/${REPO}`;
+export const PLUGINS_REPO_URL = `https://github.com/${OWNER}/NextChat-Awesome-Plugins`;
 export const ISSUE_URL = `https://github.com/${OWNER}/${REPO}/issues`;
 export const UPDATE_URL = `${REPO_URL}#keep-updated`;
 export const RELEASE_URL = `${REPO_URL}/releases`;
@@ -26,6 +29,7 @@ export const ALIBABA_BASE_URL = "https://dashscope.aliyuncs.com/api/";
 export const TENCENT_BASE_URL = "https://hunyuan.tencentcloudapi.com";
 
 export const MOONSHOT_BASE_URL = "https://api.moonshot.cn";
+export const IFLYTEK_BASE_URL = "https://spark-api-open.xf-yun.com";
 
 export const CACHE_URL_PREFIX = "/api/cache";
 export const UPLOAD_URL = `${CACHE_URL_PREFIX}/upload`;
@@ -36,10 +40,12 @@ export enum Path {
   Settings = "/settings",
   NewChat = "/new-chat",
   Masks = "/masks",
+  Plugins = "/plugins",
   Auth = "/auth",
   Sd = "/sd",
   SdNew = "/sd-new",
   Artifacts = "/artifacts",
+  SearchChat = "/search-chat",
 }
 
 export enum ApiPath {
@@ -53,6 +59,7 @@ export enum ApiPath {
   Alibaba = "/api/alibaba",
   Tencent = "/api/tencent",
   Moonshot = "/api/moonshot",
+  Iflytek = "/api/iflytek",
   Stability = "/api/stability",
   Artifacts = "/api/artifacts",
 }
@@ -67,12 +74,9 @@ export enum FileName {
   Prompts = "prompts.json",
 }
 
-export enum Plugin {
-  Artifacts = "artifacts",
-}
-
 export enum StoreKey {
   Chat = "chat-next-web-store",
+  Plugin = "chat-next-web-plugin",
   Access = "access-control",
   Config = "app-config",
   Mask = "mask-store",
@@ -109,6 +113,7 @@ export enum ServiceProvider {
   Tencent = "Tencent",
   Moonshot = "Moonshot",
   Stability = "Stability",
+  Iflytek = "Iflytek",
 }
 
 // Google API safety settings, see https://ai.google.dev/gemini-api/docs/safety-settings
@@ -130,6 +135,7 @@ export enum ModelProvider {
   Qwen = "Qwen",
   Hunyuan = "Hunyuan",
   Moonshot = "Moonshot",
+  Iflytek = "Iflytek",
 }
 
 export const Stability = {
@@ -206,6 +212,11 @@ export const Moonshot = {
   ChatPath: "v1/chat/completions",
 };
 
+export const Iflytek = {
+  ExampleEndpoint: IFLYTEK_BASE_URL,
+  ChatPath: "v1/chat/completions",
+};
+
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
 // export const DEFAULT_SYSTEM_TEMPLATE = `
 // You are ChatGPT, a large language model trained by {{ServiceProvider}}.
@@ -234,6 +245,7 @@ export const KnowledgeCutOffDate: Record<string, string> = {
   "gpt-4-turbo-preview": "2023-12",
   "gpt-4o": "2023-10",
   "gpt-4o-2024-05-13": "2023-10",
+  "gpt-4o-2024-08-06": "2023-10",
   "gpt-4o-mini": "2023-10",
   "gpt-4o-mini-2024-07-18": "2023-10",
   "gpt-4-vision-preview": "2023-04",
@@ -255,6 +267,7 @@ const openaiModels = [
   "gpt-4-turbo-preview",
   "gpt-4o",
   "gpt-4o-2024-05-13",
+  "gpt-4o-2024-08-06",
   "gpt-4o-mini",
   "gpt-4o-mini-2024-07-18",
   "gpt-4-vision-preview",
@@ -324,6 +337,14 @@ const tencentModels = [
 ];
 
 const moonshotModes = ["moonshot-v1-8k", "moonshot-v1-32k", "moonshot-v1-128k"];
+
+const iflytekModels = [
+  "general",
+  "generalv3",
+  "pro-128k",
+  "generalv3.5",
+  "4.0Ultra",
+];
 
 let seq = 1000; // 内置的模型序号生成器从1000开始
 export const DEFAULT_MODELS = [
@@ -426,6 +447,17 @@ export const DEFAULT_MODELS = [
       sorted: 9,
     },
   })),
+  ...iflytekModels.map((name) => ({
+    name,
+    available: true,
+    sorted: seq++,
+    provider: {
+      id: "iflytek",
+      providerName: "Iflytek",
+      providerType: "iflytek",
+      sorted: 10,
+    },
+  })),
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;
@@ -444,4 +476,9 @@ export const internalAllowedWebDavEndpoints = [
   "https://app.koofr.net/dav/Koofr",
 ];
 
-export const PLUGINS = [{ name: "Stable Diffusion", path: Path.Sd }];
+export const DEFAULT_GA_ID = "G-89WN60ZK2E";
+export const PLUGINS = [
+  { name: "Plugins", path: Path.Plugins },
+  { name: "Stable Diffusion", path: Path.Sd },
+  { name: "Search Chat", path: Path.SearchChat },
+];
