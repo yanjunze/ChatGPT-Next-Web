@@ -1,5 +1,4 @@
 import OpenAPIClientAxios from "openapi-client-axios";
-import { getLang, Lang } from "../locales";
 import { StoreKey } from "../constant";
 import { nanoid } from "nanoid";
 import { createPersistStore } from "../utils/store";
@@ -199,7 +198,7 @@ export const usePluginStore = createPersistStore(
 
     getAsTools(ids: string[]) {
       const plugins = get().plugins;
-      const selected = ids
+      const selected = (ids || [])
         .map((id) => plugins[id])
         .filter((i) => i)
         .map((p) => FunctionToolService.add(p));
