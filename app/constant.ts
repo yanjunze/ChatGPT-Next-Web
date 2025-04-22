@@ -593,6 +593,11 @@ const iflytekModels = [
 const deepseekModels = ["deepseek-chat", "deepseek-coder", "deepseek-reasoner"];
 
 const xAIModes = [
+  "grok-3-mini",
+  "grok-3-mini-latest",
+  "grok-3-mini-fast",
+  "grok-3-mini-fast-latest",
+  "grok-3-latest",
   "grok-beta",
   "grok-2",
   "grok-2-1212",
