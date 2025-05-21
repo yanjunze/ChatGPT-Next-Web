@@ -78,7 +78,7 @@ export class XAIApi implements LLMApi {
 
     const requestPayload: RequestPayload = {
       messages,
-      stream: options.config.stream,
+      stream: false, // options.config.stream,
       model: modelConfig.model,
       temperature: modelConfig.temperature,
       presence_penalty: modelConfig.presence_penalty,
